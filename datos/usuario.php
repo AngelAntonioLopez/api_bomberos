@@ -137,3 +137,23 @@ function mostrarporid($con)
         echo json_encode(array("mensaje" => "error, no estan todos los campos seteados"));
     }
 }
+
+function login($con){
+    if (isset($_REQUEST['correo']) && isset($_REQUEST['clave'])) {
+        $clave = $_REQUEST['clave'];
+        $correo = $_REQUEST['correo'];
+        $query = "SELECT * FROM usuario where correo = '".$correo."' and clave = '".$clave."'";
+        $resultado = mysqli_query($con, $query) or die("error al traer Usuario");
+        $contador = mysqli_num_rows($resultado);
+        if ($contador > 0) {
+            $rows = mysqli_fetch_all($resultado, MYSQLI_ASSOC);
+            $row = reset($rows);
+            echo json_encode($row);
+        } else {
+            echo json_encode(array("mensaje" => "error"));
+        }
+        mysqli_close($con);
+    } else {
+        echo json_encode(array("mensaje" => "error, no estan todos los campos seteados"));
+    }
+}
